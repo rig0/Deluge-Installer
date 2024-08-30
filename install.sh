@@ -108,10 +108,10 @@ systemctl restart deluged
 systemctl restart deluge-web
 
 systemctl stop deluged
-systemctl stop deluged
+systemctl stop deluge-web
 
 printf "$ST Changing default download location \n $SB"
-sleep $delay
+sleep 3
 # Change the default download location
 sed -i 's#"download_location": "/var/lib/deluged/Downloads"#"download_location": "/mnt/deluge"#' "/var/lib/deluged/.config/deluge/core.conf"
 sed -i 's#"move_completed_path": "/var/lib/deluged/Downloads"#"move_completed_path": "/mnt/deluge"#' "/var/lib/deluged/.config/deluge/core.conf"
