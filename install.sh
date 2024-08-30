@@ -32,9 +32,9 @@ gpasswd -a root deluge
 gpasswd -a $usr deluge
 
 #creating download folders & setting perms
-chmod 774 /home/deluge
-mkdir /home/deluge/Downloads
-chown -R deluge:deluge /home/deluge/Downloads
+mkdir /mnt/deluge
+chmod 774 /mnt/deluge
+chown -R deluge:deluge /mnt/deluge
 
 #Creating system service for deluge
 touch /etc/systemd/system/deluged.service
