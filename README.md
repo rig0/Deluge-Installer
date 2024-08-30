@@ -21,11 +21,9 @@ It also creates a service that starts at boot.
 
 ## Run Installer
 
-``./Deluge-Installer/install.sh user``
+``./Deluge-Installer/install.sh user*``
 
 *The user argument is optional. It adds your user to the deluge group so you can manage the downloads.*
-
-Allow the default port 8112 if using a firewall
 
 Access your web ui http://server_ip:8112
 

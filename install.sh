@@ -2,7 +2,7 @@
 #RAMBO TORRENT BOX SETUP SCRIPT. [DEBIAN 9+]
 #Installs Deluge Daemon and Web-UI
 
-usr=$1 #username
+usr=$1 #username to add to deluge group (optional)
 
 #Bash styling
 BLUE='\033[1;36m'
@@ -28,11 +28,10 @@ if [ $# -lt 1 ]; then
     gpasswd -a $usr deluge
 fi
 
-
-#creating download folders & setting perms
+#creating download folders & setting permssions that play nice with servarr stack
 mkdir /mnt/deluge
 chmod 774 /mnt/deluge
-chown -R deluge:deluge /mnt/deluge
+chown -R deluge:media /mnt/deluge
 
 #Creating system service for deluge
 touch /etc/systemd/system/deluged.service
@@ -78,6 +77,11 @@ echo "Restart=on-failure" >> /etc/systemd/system/deluge-web.service
 echo " " >> /etc/systemd/system/deluge-web.service
 echo "[Install] " >> /etc/systemd/system/deluge-web.service
 echo "WantedBy=multi-user.target " >> /etc/systemd/system/deluge-web.service
+
+# Change the default download location
+sed -i 's#"download_location": "/home/deluge/Downloads"#"download_location": "/mnt/deluge"#' "/home/deluge/.config/core.conf"
+sed -i 's#"move_completed_path": "/home/deluge/Downloads"#"move_completed_path": "/mnt/deluge"#' "/home/deluge/.config/core.conf"
+sed -i 's#"torrentfiles_location": "/home/deluge/Downloads"#"torrentfiles_location": "/mnt/deluge"#' "/home/deluge/.config/core.conf"
 
 #Starting web service
 systemctl start deluge-web
