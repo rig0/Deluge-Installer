@@ -58,7 +58,6 @@ printf "$ST Starting daemon service \n $SB"
 sleep $delay
 # Starting daemon service
 systemctl start deluged
-systemctl enable deluged
 systemctl status deluged --no-pager
 
 
@@ -66,7 +65,6 @@ printf "$ST Starting web service \n $SB"
 sleep $delay
 # Starting web service
 systemctl start deluge-web
-systemctl enable deluge-web
 systemctl status deluge-web --no-pager
 
 
