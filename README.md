@@ -7,7 +7,7 @@ Installs deluge daemon and deluge web interface.
 
 ## Install
 
-```wget -q https://rigslab.com/Rambo/Deluge-Installer/raw/branch/main/install.sh -O install.sh && chmod +x script.sh && ./script.sh```
+```wget -q https://rigslab.com/Rambo/Deluge-Installer/raw/branch/main/install.sh -O install.sh && chmod +x install.sh && ./install.sh```
 
 
 *The script accepts an optional user argument. It adds your user to the deluge group so you can manage the downloads.*
