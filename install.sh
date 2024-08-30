@@ -108,6 +108,15 @@ systemctl start deluge-web
 systemctl enable deluge-web
 systemctl status deluge-web --no-pager
 
+
+# Check if UFW is installed
+if command -v ufw > /dev/null 2>&1; then
+    # Check if UFW is enabled
+    if sudo ufw status | grep -q "Status: active"; then
+        ufw allow 8112/tcp
+    fi
+fi
+
 # Sending notification is pushover is installed
 if [ -f /usr/bin/pushover ]; then
     pushover "Deluge Setup Complete"
