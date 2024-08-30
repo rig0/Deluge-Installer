@@ -2,7 +2,8 @@
 #RAMBO TORRENT BOX SETUP SCRIPT. [DEBIAN 9+]
 #Installs Deluge Daemon and Web-UI
 
-usr=$1 #username to add to deluge group (optional)
+usr=$1 #username to add to deluge group (optional argument)
+delugeUsr="deluge"
 
 #Bash styling
 BLUE='\033[1;36m'
@@ -21,7 +22,7 @@ printf "$ST Configuring Deluge \n $SB"
 sleep $delay
 
 #Creating deluge user and group
-#adduser deluge
+adduser --system $delugeUsr
 #gpasswd -a root deluge
 
 #if [ $# -lt 1 ]; then
@@ -31,7 +32,7 @@ sleep $delay
 #creating download folders & setting permssions that play nice with servarr stack
 mkdir /mnt/deluge
 chmod 774 /mnt/deluge
-chown -R deluge:media /mnt/deluge
+chown -R $delugeUsr:media /mnt/deluge
 
 printf "$ST Creating system services \n $SB"
 #Creating system service for deluge
@@ -42,8 +43,8 @@ echo "After=network-online.target" >> /etc/systemd/system/deluged.service
 echo " " >> /etc/systemd/system/deluged.service
 echo "[Service]" >> /etc/systemd/system/deluged.service
 echo "Type=simple" >> /etc/systemd/system/deluged.service
-echo "User=deluge" >> /etc/systemd/system/deluged.service
-echo "Group=deluge" >> /etc/systemd/system/deluged.service
+echo "User=$delugeUsr" >> /etc/systemd/system/deluged.service
+echo "Group=$delugeUsr" >> /etc/systemd/system/deluged.service
 echo "UMask=007" >> /etc/systemd/system/deluged.service
 echo " " >> /etc/systemd/system/deluged.service
 echo "ExecStart=/usr/bin/deluged -d" >> /etc/systemd/system/deluged.service
@@ -68,8 +69,8 @@ echo "After=network-online.target" >> /etc/systemd/system/deluge-web.service
 echo " " >> /etc/systemd/system/deluge-web.service
 echo "[Service]" >> /etc/systemd/system/deluge-web.service
 echo "Type=simple" >> /etc/systemd/system/deluge-web.service
-echo "User=deluge" >> /etc/systemd/system/deluge-web.service
-echo "Group=deluge" >> /etc/systemd/system/deluge-web.service
+echo "User=$delugeUsr" >> /etc/systemd/system/deluge-web.service
+echo "Group=$delugeUsr" >> /etc/systemd/system/deluge-web.service
 echo "UMask=027" >> /etc/systemd/system/deluge-web.service
 echo " " >> /etc/systemd/system/deluge-web.service
 echo "ExecStart=/usr/bin/deluge-web -d" >> /etc/systemd/system/deluge-web.service
