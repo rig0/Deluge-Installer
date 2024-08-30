@@ -3,6 +3,8 @@
 Deluge install script for headless debian based linux servers.
 Installs deluge daemon and deluge web interface.
 
+**Needs to be run as root**
+
 ## Install
 
 ``wget -q https://rigslab.com/Rambo/Deluge-Installer/raw/branch/main/install.sh -O install.sh && chmod +x script.sh && ./script.sh``
