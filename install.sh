@@ -85,6 +85,16 @@ echo "WantedBy=multi-user.target " >> /etc/systemd/system/deluge-web.service
 systemctl start deluge-web
 systemctl enable deluge-web
 
+#Copy keys over to user
+mkdir /home/deluge/.ssh
+cp -R /root/.ssh/* /home/deluge/.ssh/
+chown -R deluge:deluge /home/deluge/.ssh/
+chmod 700 /home/deluge/.ssh/
+chmod 600 /home/deluge/.ssh/authorized_keys
+chmod 600 /home/deluge/.ssh/id_rsa
+chmod 644 /home/deluge/.ssh/id_rsa.pub
+service sshd restart
+
 if [ -f /usr/bin/pushover ]; then
     pushover "Deluge Setup Complete"
 fi
