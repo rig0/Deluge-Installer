@@ -4,12 +4,6 @@
 
 usr=$1 #username
 
-#Make sure arguments are passed
-if [ $# -lt 1 ]; then
-    printf "Usage: install.sh user\n"
-    exit 1
-fi
-
 #Bash styling
 BLUE='\033[1;36m'
 YELLOW='\033[1;33m'
@@ -29,7 +23,11 @@ sleep $delay
 #Creating deluge user and group
 adduser deluge
 gpasswd -a root deluge
-gpasswd -a $usr deluge
+
+if [ $# -lt 1 ]; then
+    gpasswd -a $usr deluge
+fi
+
 
 #creating download folders & setting perms
 mkdir /mnt/deluge
