@@ -21,7 +21,7 @@ delay=1 # delay in seconds after showing step
 printf "$ST Updating OS & Installing Deluge \n $SB"
 sleep $delay
 apt update && apt upgrade -y
-apt install deluged deluge-web git pip -y
+apt install deluged deluge-web git curl pip -y
 
 printf "$ST Configuring Deluge \n $SB"
 sleep $delay

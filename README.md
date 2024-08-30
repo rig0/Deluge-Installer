@@ -6,7 +6,7 @@ It also creates a service that starts at boot.
 
 ## Prepare system
 
-``apt update && apt dist-upgrade -y && apt install git qemu-guest-agent -y``
+``apt update && apt dist-upgrade -y && apt install git -y``
 
 
 ## Clone the installer
