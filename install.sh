@@ -87,6 +87,13 @@ echo " " >> /etc/systemd/system/deluge-web.service
 echo "[Install] " >> /etc/systemd/system/deluge-web.service
 echo "WantedBy=multi-user.target " >> /etc/systemd/system/deluge-web.service
 
+printf "$ST Changing default download location \n $SB"
+sleep $delay
+# Change the default download location
+sed -i 's#"download_location": "/var/lib/deluged/Downloads"#"download_location": "/mnt/deluge"#' "/var/lib/deluged/config/core.conf"
+sed -i 's#"move_completed_path": "/var/lib/deluged/Downloads"#"move_completed_path": "/mnt/deluge"#' "/var/lib/deluged/config/core.conf"
+sed -i 's#"torrentfiles_location": "/var/lib/deluged/Downloads"#"torrentfiles_location": "/mnt/deluge"#' "/var/lib/deluged/config/core.conf"
+
 
 printf "$ST Starting daemon service \n $SB"
 sleep $delay
@@ -103,19 +110,6 @@ systemctl start deluge-web
 systemctl enable deluge-web
 systemctl status deluge-web --no-pager
 
-printf "$ST Changing default download location \n $SB"
-sleep $delay
-# Change the default download location
-
-systemctl stop deluged
-systemctl stop deluge-web
-sleep 3
-sed -i 's#"download_location": "/var/lib/deluged/Downloads"#"download_location": "/mnt/deluge"#' "/var/lib/deluged/.config/deluge/core.conf"
-sed -i 's#"move_completed_path": "/var/lib/deluged/Downloads"#"move_completed_path": "/mnt/deluge"#' "/var/lib/deluged/.config/deluge/core.conf"
-sed -i 's#"torrentfiles_location": "/var/lib/deluged/Downloads"#"torrentfiles_location": "/mnt/deluge"#' "/var/lib/deluged/.config/deluge/core.conf"
-
-systemctl start deluged
-systemctl start deluge-web
 
 # Check if UFW is installed
 if command -v ufw > /dev/null 2>&1; then
