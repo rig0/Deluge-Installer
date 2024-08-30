@@ -31,8 +31,8 @@ else
     groupadd media
 fi
 
-# Add deluge
-usermod -aG media $delugeUsr
+# Add deluge user
+#usermod -aG media $delugeUsr
 
 # Add user to deluge and media group
 if [ $# -lt 1 ]; then
@@ -93,7 +93,7 @@ echo "WantedBy=multi-user.target " >> /etc/systemd/system/deluge-web.service
 #sed -i 's#"move_completed_path": "/home/deluge/Downloads"#"move_completed_path": "/mnt/deluge"#' "/home/deluge/.config/deluge/core.conf"
 #sed -i 's#"torrentfiles_location": "/home/deluge/Downloads"#"torrentfiles_location": "/mnt/deluge"#' "/home/deluge/.config/deluge/core.conf"
 
-printf "$ST Satrting services \n $SB"
+printf "$ST Starting services \n $SB"
 # Starting deluge service
 systemctl start deluged
 systemctl enable deluged
