@@ -16,12 +16,12 @@ It also creates a service that starts at boot.
 
 ## Make executable
 
-``chmod +x ./Deluge-Download/install.sh``
+``chmod +x ./Deluge-Installer/install.sh``
 
 
 ## Run Installer
 
-``./Deluge-Download/install.sh user``
+``./Deluge-Installer/install.sh user``
 
 *The user argument is optional. It adds your user to the deluge group so you can manage the downloads.*
 
