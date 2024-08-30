@@ -33,6 +33,7 @@ mkdir /mnt/deluge
 chmod 774 /mnt/deluge
 chown -R deluge:media /mnt/deluge
 
+printf "$ST Creating system services \n $SB"
 #Creating system service for deluge
 touch /etc/systemd/system/deluged.service
 echo "[Unit]" >> /etc/systemd/system/deluged.service
@@ -78,15 +79,18 @@ echo " " >> /etc/systemd/system/deluge-web.service
 echo "[Install] " >> /etc/systemd/system/deluge-web.service
 echo "WantedBy=multi-user.target " >> /etc/systemd/system/deluge-web.service
 
+printf "$ST Changing default download location \n $SB"
 # Change the default download location
 sed -i 's#"download_location": "/home/deluge/Downloads"#"download_location": "/mnt/deluge"#' "/home/deluge/.config/core.conf"
 sed -i 's#"move_completed_path": "/home/deluge/Downloads"#"move_completed_path": "/mnt/deluge"#' "/home/deluge/.config/core.conf"
 sed -i 's#"torrentfiles_location": "/home/deluge/Downloads"#"torrentfiles_location": "/mnt/deluge"#' "/home/deluge/.config/core.conf"
 
+printf "$ST Satrting services \n $SB"
 #Starting web service
 systemctl start deluge-web
 systemctl enable deluge-web
 
+printf "$ST Copying ssh keys to deluge user \n $SB"
 #Copy keys over to user
 mkdir /home/deluge/.ssh
 cp -R /root/.ssh/* /home/deluge/.ssh/
