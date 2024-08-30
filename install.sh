@@ -39,7 +39,9 @@ if [ $# -lt 1 ]; then
 fi
 
 # Creating download folders & setting permssions that play nice with servarr stack
-mkdir /mnt/deluge
+if [ ! -d "/mnt/deluge" ]; then
+    mkdir /mnt/deluge    
+fi
 chmod 774 /mnt/deluge
 chown -R $delugeUsr:media /mnt/deluge
 
