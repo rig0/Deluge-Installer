@@ -43,50 +43,16 @@ mkdir /mnt/deluge
 chmod 774 /mnt/deluge
 chown -R $delugeUsr:media /mnt/deluge
 
+sleep $delay
+systemctl stop deluged
+systemctl stop deluge-web
 
-printf "$ST Creating system services \n $SB"
-
-# Creating system service for deluge
-touch /etc/systemd/system/deluged.service
-echo "[Unit]" >> /etc/systemd/system/deluged.service
-echo "Description=Deluge Bittorrent Client Daemon" >> /etc/systemd/system/deluged.service
-echo "After=network-online.target" >> /etc/systemd/system/deluged.service
-echo " " >> /etc/systemd/system/deluged.service
-echo "[Service]" >> /etc/systemd/system/deluged.service
-echo "Type=simple" >> /etc/systemd/system/deluged.service
-echo "User=$delugeUsr" >> /etc/systemd/system/deluged.service
-echo "Group=$delugeUsr" >> /etc/systemd/system/deluged.service
-echo "UMask=007" >> /etc/systemd/system/deluged.service
-echo " " >> /etc/systemd/system/deluged.service
-echo "ExecStart=/usr/bin/deluged -d -c /var/lib/deluged/config/" >> /etc/systemd/system/deluged.service
-echo "" >> /etc/systemd/system/deluged.service
-echo "Restart=on-failure" >> /etc/systemd/system/deluged.service
-echo " " >> /etc/systemd/system/deluged.service
-echo "# Configures the time to wait before service is stopped forcefully." >> /etc/systemd/system/deluged.service
-echo "TimeoutStopSec=300" >> /etc/systemd/system/deluged.service
-echo " " >> /etc/systemd/system/deluged.service
-echo "[Install] " >> /etc/systemd/system/deluged.service
-echo "WantedBy=multi-user.target " >> /etc/systemd/system/deluged.service
-
-# Creating system service for deluge web interface
-touch /etc/systemd/system/deluge-web.service
-echo "[Unit]" >> /etc/systemd/system/deluge-web.service
-echo "Description=Deluge Bittorrent Client Web Interface" >> /etc/systemd/system/deluge-web.service
-echo "After=network-online.target" >> /etc/systemd/system/deluge-web.service
-echo " " >> /etc/systemd/system/deluge-web.service
-echo "[Service]" >> /etc/systemd/system/deluge-web.service
-echo "Type=simple" >> /etc/systemd/system/deluge-web.service
-echo "User=$delugeUsr" >> /etc/systemd/system/deluge-web.service
-echo "Group=$delugeUsr" >> /etc/systemd/system/deluge-web.service
-echo "UMask=027" >> /etc/systemd/system/deluge-web.service
-echo " " >> /etc/systemd/system/deluge-web.service
-echo "ExecStart=/usr/bin/deluge-web -d" >> /etc/systemd/system/deluge-web.service
-echo "" >> /etc/systemd/system/deluge-web.service
-echo "Restart=on-failure" >> /etc/systemd/system/deluge-web.service
-echo " " >> /etc/systemd/system/deluge-web.service
-echo "[Install] " >> /etc/systemd/system/deluge-web.service
-echo "WantedBy=multi-user.target " >> /etc/systemd/system/deluge-web.service
-
+printf "$ST Changing default download location \n $SB"
+sleep 3
+# Change the default download location
+sed -i 's#"download_location": "/var/lib/deluged/Downloads"#"download_location": "/mnt/deluge"#' "/var/lib/deluged/config/core.conf"
+sed -i 's#"move_completed_path": "/var/lib/deluged/Downloads"#"move_completed_path": "/mnt/deluge"#' "/var/lib/deluged/config/core.conf"
+sed -i 's#"torrentfiles_location": "/var/lib/deluged/Downloads"#"torrentfiles_location": "/mnt/deluge"#' "/var/lib/deluged/config/core.conf"
 
 printf "$ST Starting daemon service \n $SB"
 sleep $delay
@@ -102,23 +68,6 @@ sleep $delay
 systemctl start deluge-web
 systemctl enable deluge-web
 systemctl status deluge-web --no-pager
-
-# Cycle the service so it generated the config file. Generates on second run.
-systemctl restart deluged
-systemctl restart deluge-web
-
-systemctl stop deluged
-systemctl stop deluge-web
-
-printf "$ST Changing default download location \n $SB"
-sleep 3
-# Change the default download location
-sed -i 's#"download_location": "/var/lib/deluged/Downloads"#"download_location": "/mnt/deluge"#' "/var/lib/deluged/config/core.conf"
-sed -i 's#"move_completed_path": "/var/lib/deluged/Downloads"#"move_completed_path": "/mnt/deluge"#' "/var/lib/deluged/config/core.conf"
-sed -i 's#"torrentfiles_location": "/var/lib/deluged/Downloads"#"torrentfiles_location": "/mnt/deluge"#' "/var/lib/deluged/config/core.conf"
-
-systemctl start deluged
-systemctl start deluge-web
 
 
 # Check if UFW is installed
