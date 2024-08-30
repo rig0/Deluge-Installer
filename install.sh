@@ -3,7 +3,7 @@
 # Installs Deluge Daemon and Web-UI
 
 usr=$1 # username to add to deluge group (optional argument)
-delugeUsr="debian-deluged"
+delugeUsr="deluge"
 
 # Bash styling
 BLUE='\033[1;36m'
@@ -22,7 +22,7 @@ printf "$ST Configuring Deluge \n $SB"
 sleep $delay
 
 # Creating deluge user and group
-#adduser --system --group $delugeUsr
+adduser --system --group $delugeUsr
 
 # Check if media group exists
 if getent group "media" > /dev/null 2>&1; then
