@@ -1,32 +1,21 @@
 # Deluge-Installer
 
 Deluge install script for headless debian based linux servers.
-Installs deluge daemon and deluge web interface. 
-It also creates a service that starts at boot.
+Installs deluge daemon and deluge web interface.
 
-## Prepare system
+## Install
 
-``apt update && apt dist-upgrade -y && apt install git -y``
-
-
-## Clone the installer
-
-``git clone https://rigslab.com/Rambo/Deluge-Installer.git``
+``wget -q https://rigslab.com/Rambo/Deluge-Installer/raw/branch/main/install.sh -O install.sh && chmod +x script.sh && ./script.sh``
 
 
-## Make executable
+*The script accepts an optional user argument. It adds your user to the deluge group so you can manage the downloads.*
 
-``chmod +x ./Deluge-Installer/install.sh``
-
-
-## Run Installer
-
-``./Deluge-Installer/install.sh user*``
-
-*The user argument is optional. It adds your user to the deluge group so you can manage the downloads.*
+## Post Installation
 
 Access your web ui http://server_ip:8112
 
-Default password is ``deluge``
+Default password for the web ui is ``deluge``
 
-The download folder should be set to /mnt/deluge
+The default downloads folder is ``/mnt/deluge``
+
+The group ``media`` has been given access to the downloads folder to enable sharing with Servarr apps.
