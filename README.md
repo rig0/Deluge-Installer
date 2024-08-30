@@ -30,3 +30,5 @@ Allow the default port 8112 if using a firewall
 Access your web ui http://server_ip:8112
 
 Default password is ``deluge``
+
+The download folder should be set to /mnt/deluge
