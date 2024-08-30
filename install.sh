@@ -21,12 +21,12 @@ printf "$ST Configuring Deluge \n $SB"
 sleep $delay
 
 #Creating deluge user and group
-adduser deluge
-gpasswd -a root deluge
+#adduser deluge
+#gpasswd -a root deluge
 
-if [ $# -lt 1 ]; then
-    gpasswd -a $usr deluge
-fi
+#if [ $# -lt 1 ]; then
+#    gpasswd -a $usr deluge
+#fi
 
 #creating download folders & setting permssions that play nice with servarr stack
 mkdir /mnt/deluge
@@ -81,9 +81,9 @@ echo "WantedBy=multi-user.target " >> /etc/systemd/system/deluge-web.service
 
 printf "$ST Changing default download location \n $SB"
 # Change the default download location
-sed -i 's#"download_location": "/home/deluge/Downloads"#"download_location": "/mnt/deluge"#' "/home/deluge/.config/deluge/core.conf"
-sed -i 's#"move_completed_path": "/home/deluge/Downloads"#"move_completed_path": "/mnt/deluge"#' "/home/deluge/.config/deluge/core.conf"
-sed -i 's#"torrentfiles_location": "/home/deluge/Downloads"#"torrentfiles_location": "/mnt/deluge"#' "/home/deluge/.config/deluge/core.conf"
+#sed -i 's#"download_location": "/home/deluge/Downloads"#"download_location": "/mnt/deluge"#' "/home/deluge/.config/deluge/core.conf"
+#sed -i 's#"move_completed_path": "/home/deluge/Downloads"#"move_completed_path": "/mnt/deluge"#' "/home/deluge/.config/deluge/core.conf"
+#sed -i 's#"torrentfiles_location": "/home/deluge/Downloads"#"torrentfiles_location": "/mnt/deluge"#' "/home/deluge/.config/deluge/core.conf"
 
 printf "$ST Satrting services \n $SB"
 #Starting web service
@@ -92,14 +92,14 @@ systemctl enable deluge-web
 
 printf "$ST Copying ssh keys to deluge user \n $SB"
 #Copy keys over to user
-mkdir /home/deluge/.ssh
-cp -R /root/.ssh/* /home/deluge/.ssh/
-chown -R deluge:deluge /home/deluge/.ssh/
-chmod 700 /home/deluge/.ssh/
-chmod 600 /home/deluge/.ssh/authorized_keys
-chmod 600 /home/deluge/.ssh/id_rsa
-chmod 644 /home/deluge/.ssh/id_rsa.pub
-service sshd restart
+#mkdir /home/deluge/.ssh
+#cp -R /root/.ssh/* /home/deluge/.ssh/
+#chown -R deluge:deluge /home/deluge/.ssh/
+#chmod 700 /home/deluge/.ssh/
+#chmod 600 /home/deluge/.ssh/authorized_keys
+#chmod 600 /home/deluge/.ssh/id_rsa
+#chmod 644 /home/deluge/.ssh/id_rsa.pub
+#service sshd restart
 
 if [ -f /usr/bin/pushover ]; then
     pushover "Deluge Setup Complete"
