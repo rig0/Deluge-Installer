@@ -22,7 +22,7 @@ printf "$ST Configuring Deluge \n $SB"
 sleep $delay
 
 # Creating deluge user and group
-adduser --system --group $delugeUsr
+#adduser --system --group $delugeUsr
 
 # Check if media group exists
 if getent group "media" > /dev/null 2>&1; then
@@ -31,8 +31,8 @@ else
     groupadd media
 fi
 
-# Add deluge user
-#usermod -aG media $delugeUsr
+# Add deluge user to media group
+usermod -aG media $delugeUsr
 
 # Add user to deluge and media group
 if [ $# -lt 1 ]; then
