@@ -27,7 +27,7 @@ printf "$ST Configuring Deluge \n $SB"
 sleep $delay
 
 #Creating deluge user and group
-adduser --system --group deluge
+adduser --group deluge
 gpasswd -a root deluge
 gpasswd -a $usr deluge
 
