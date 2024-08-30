@@ -3,7 +3,7 @@
 # Installs Deluge Daemon and Web-UI
 
 usr=$1 # username to add to deluge group (optional argument)
-delugeUsr="deluge"
+delugeUsr="debian-deluged" # the user the deluge pkg creates and uses
 
 # Bash styling
 BLUE='\033[1;36m'
@@ -18,11 +18,9 @@ sleep $delay
 apt update && apt dist-upgrade -y
 apt install deluged deluge-web -y
 
+
 printf "$ST Configuring Deluge \n $SB"
 sleep $delay
-
-# Creating deluge user and group
-adduser --system --group $delugeUsr
 
 # Check if media group exists
 if getent group "media" > /dev/null 2>&1; then
@@ -45,7 +43,9 @@ mkdir /mnt/deluge
 chmod 774 /mnt/deluge
 chown -R $delugeUsr:media /mnt/deluge
 
+
 printf "$ST Creating system services \n $SB"
+
 # Creating system service for deluge
 touch /etc/systemd/system/deluged.service
 echo "[Unit]" >> /etc/systemd/system/deluged.service
@@ -87,31 +87,28 @@ echo " " >> /etc/systemd/system/deluge-web.service
 echo "[Install] " >> /etc/systemd/system/deluge-web.service
 echo "WantedBy=multi-user.target " >> /etc/systemd/system/deluge-web.service
 
-#printf "$ST Changing default download location \n $SB"
-# Change the default download location
-#sed -i 's#"download_location": "/home/deluge/Downloads"#"download_location": "/mnt/deluge"#' "/home/deluge/.config/deluge/core.conf"
-#sed -i 's#"move_completed_path": "/home/deluge/Downloads"#"move_completed_path": "/mnt/deluge"#' "/home/deluge/.config/deluge/core.conf"
-#sed -i 's#"torrentfiles_location": "/home/deluge/Downloads"#"torrentfiles_location": "/mnt/deluge"#' "/home/deluge/.config/deluge/core.conf"
 
-printf "$ST Starting services \n $SB"
-# Starting deluge service
+printf "$ST Changing default download location \n $SB"
+# Change the default download location
+sed -i 's#"download_location": "/var/lib/deluged/Downloads"#"download_location": "/mnt/deluge"#' "/var/lib/deluged/config/core.conf"
+sed -i 's#"move_completed_path": "/var/lib/deluged/Downloads"#"move_completed_path": "/mnt/deluge"#' "/var/lib/deluged/config/core.conf"
+sed -i 's#"torrentfiles_location": "/var/lib/deluged/Downloads"#"torrentfiles_location": "/mnt/deluge"#' "/var/lib/deluged/config/core.conf"
+
+
+printf "$ST Starting daemon service \n $SB"
+# Starting daemon service
 systemctl start deluged
 systemctl enable deluged
+systemctl status deluged --no-pager
+
+
+printf "$ST Starting web service \n $SB"
 # Starting web service
 systemctl start deluge-web
 systemctl enable deluge-web
+systemctl status deluge-web --no-pager
 
-#printf "$ST Copying ssh keys to deluge user \n $SB"
-# Copy keys over to user
-#mkdir /home/deluge/.ssh
-#cp -R /root/.ssh/* /home/deluge/.ssh/
-#chown -R deluge:deluge /home/deluge/.ssh/
-#chmod 700 /home/deluge/.ssh/
-#chmod 600 /home/deluge/.ssh/authorized_keys
-#chmod 600 /home/deluge/.ssh/id_rsa
-#chmod 644 /home/deluge/.ssh/id_rsa.pub
-#service sshd restart
-
+# Sending notification is pushover is installed
 if [ -f /usr/bin/pushover ]; then
     pushover "Deluge Setup Complete"
 fi
