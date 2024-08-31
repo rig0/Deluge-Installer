@@ -18,7 +18,6 @@ sleep $delay
 apt update && apt dist-upgrade -y
 apt install deluged deluge-web -y
 
-
 printf "$ST Configuring Deluge \n $SB"
 sleep $delay
 
@@ -51,8 +50,25 @@ systemctl stop deluge-web
 
 printf "$ST Editing service to to download fils with correct permissions \n $SB"
 sleep $delay
+# Edit the init.d script
 sed -i '/^MASK=/s/0027/0002/' "/etc/init.d/deluged" 
 sed -i '/^USER=/a GROUP=media' "/etc/init.d/deluged"
+
+# Edit the daemon service
+$daemonService = /lib/systemd/system/deluged.service
+if [ -f $daemonService ]; then
+    sed -i '/^UMask=/s/007/002/' $daemonService
+    sed -i '/^Group=/s/debian-deluged/media/' $daemonService 
+fi
+# Edit the web service
+$webService = /lib/systemd/system/deluge-web.service
+if [ -f $webService ]; then
+    sed -i '/^UMask=/s/007/002/' $webService
+    sed -i '/^Group=/s/debian-deluged/media/' $webService
+fi
+
+# reload the system services daemon
+systemctl daemon-reload
 
 printf "$ST Changing default download location \n $SB"
 sleep $delay
@@ -63,17 +79,16 @@ sed -i 's#"torrentfiles_location": "/var/lib/deluged/Downloads"#"torrentfiles_lo
 
 printf "$ST Starting daemon service \n $SB"
 sleep $delay
+
 # Starting daemon service
 systemctl start deluged
 systemctl status deluged --no-pager
-
 
 printf "$ST Starting web service \n $SB"
 sleep $delay
 # Starting web service
 systemctl start deluge-web
 systemctl status deluge-web --no-pager
-
 
 # Check if UFW is installed
 if command -v ufw > /dev/null 2>&1; then
