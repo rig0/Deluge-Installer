@@ -55,13 +55,13 @@ sed -i '/^MASK=/s/0027/0002/' "/etc/init.d/deluged"
 sed -i '/^USER=/a GROUP=media' "/etc/init.d/deluged"
 
 # Edit the daemon service
-$daemonService = /lib/systemd/system/deluged.service
+$daemonService = '/lib/systemd/system/deluged.service'
 if [ -f $daemonService ]; then
     sed -i '/^UMask=/s/007/002/' $daemonService
     sed -i '/^Group=/s/debian-deluged/media/' $daemonService 
 fi
 # Edit the web service
-$webService = /lib/systemd/system/deluge-web.service
+$webService = '/lib/systemd/system/deluge-web.service'
 if [ -f $webService ]; then
     sed -i '/^UMask=/s/007/002/' $webService
     sed -i '/^Group=/s/debian-deluged/media/' $webService
