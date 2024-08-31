@@ -13,6 +13,14 @@ ST="\n${YELLOW}-----------------------------------------------------------------
 SB="\n----------------------------------------------------------------------\n\n${NC}"
 delay=2 # delay in seconds after showing step
 
+# If arguemnt passed, Check that the user exists
+if [ $# -ge 1 ]; then
+    if ! id "$usr" &>/dev/null; then
+        echo "User '$usr' does not exist. Run script without a user or specify an existing user."
+        exit
+    fi
+fi
+
 printf "$ST Updating OS & Installing Deluge \n $SB"
 sleep $delay
 
@@ -36,7 +44,7 @@ usermod -aG media $delugeUsr
 echo "Added '$delugeUsr' to the 'media' group"
 
 # Add our user to deluge and media group
-if [ $# -ge 1 ]; then 
+if [ $# -ge 1 ]; then
     usermod -aG media $usr
     usermod -aG $delugeUsr $usr
     echo "Added '$usr' and '$delugeUsr' to the 'media' group"
