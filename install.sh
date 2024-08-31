@@ -67,9 +67,6 @@ if [ -f $webService ]; then
     sed -i '/^Group=/s/debian-deluged/media/' $webService
 fi
 
-# reload the system services daemon
-systemctl daemon-reload
-
 printf "$ST Changing default download location \n $SB"
 sleep $delay
 # Change the default download location
@@ -79,6 +76,9 @@ sed -i 's#"torrentfiles_location": "/var/lib/deluged/Downloads"#"torrentfiles_lo
 
 printf "$ST Starting daemon service \n $SB"
 sleep $delay
+
+# reload the system services daemon
+systemctl daemon-reload
 
 # Starting daemon service
 systemctl start deluged
