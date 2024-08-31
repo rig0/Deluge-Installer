@@ -33,7 +33,7 @@ fi
 usermod -aG media $delugeUsr
 
 # Add user to deluge and media group
-if [ $# -lt 1 ]; then
+if [ $# -ge 1 ]; then 
     usermod -aG media $usr
     usermod -aG $delugeUsr $usr
 fi
