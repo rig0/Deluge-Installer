@@ -47,7 +47,8 @@ echo "Added '$delugeUsr' to the 'media' group"
 if [ $# -ge 1 ]; then
     usermod -aG media $usr
     usermod -aG $delugeUsr $usr
-    echo "Added '$usr' and '$delugeUsr' to the 'media' group"
+    echo "Added '$usr' to the 'media' group"
+    echo "Added '$usr' to the $delugeUsr group"
 fi
 
 
